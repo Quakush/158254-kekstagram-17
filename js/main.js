@@ -1,6 +1,6 @@
 'use strict';
 
-var MIN = 1; // начальное значения для диапазона случайных чисел
+var MIN = 0; // начальное значения для диапазона случайных чисел
 var MIN_LIKES = 15; // минимальное кол-вл лайков
 var MAX_LIKES = 200; // максимальное кол-во лайков
 var template = document.querySelector('#picture').content.querySelector('.picture');
@@ -21,18 +21,18 @@ var messages = [
 var avatars = ['img/avatar-1.svg', 'img/avatar-2.svg', 'img/avatar-3.svg', 'img/avatar-4.svg', 'img/avatar-5.svg', 'img/avatar-6.svg'];
 
 var getRandom = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return Math.floor(Math.random() * (max - min + 1));
 };
 
 var getComments = function () {
   var text = [];
-  for (var i = 0; i < getRandom(MIN, 5); i++) { // случайное кол-во комментариев
-    text[i] = messages[getRandom(MIN, 5)]; // заполняю случайнм комментарием
+  for (var i = 0; i < getRandom(MIN, messages.length); i++) { // случайное кол-во комментариев
+    text[i] = messages[getRandom(MIN, messages.length)]; // заполняю случайнм комментарием
   }
   var comment = {
-    avatar: avatars[getRandom(MIN, 5)],
+    avatar: avatars[getRandom(MIN, avatars.length)],
     message: text,
-    name: names[getRandom(MIN, 9)]
+    name: names[getRandom(MIN, names.length)]
   };
   return comment;
 };
