@@ -17,19 +17,38 @@ var messages = [
 
 var avatars = ['img/avatar-1.svg', 'img/avatar-2.svg', 'img/avatar-3.svg', 'img/avatar-4.svg', 'img/avatar-5.svg', 'img/avatar-6.svg'];
 
+var getRandom = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+var getComments = function () {
+  var text = [];
+  for (var i = 0; i < getRandom(1, 5); i++) {
+    text[i] = messages[getRandom(0, 5)];
+  }
+  var comment = {
+    avatar: avatars[getRandom(0, 5)],
+    message: text,
+    name: names[getRandom(0, 9)]
+  };
+  return comment;
+};
+
 var initPhoto = function () {
   var photos = [];
 
   for (var i = 0; i < 25; i++) {
     photos[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
-      /* likes: getRandom(15, 200) */
+      likes: getRandom(15, 200),
+      comments: getComments()
     };
     var photoElement = template.cloneNode(true);
 
     photoElement.querySelector('.picture__img').src = photos[i].url;
-    /* photoElement.querySelector('.picture__likes').textContent = photos[i].likes; */
-    /* photoElement.querySelector('.picture__comments').textContent = photos[i].comment; */
+    photoElement.querySelector('.picture__likes').textContent = photos[i].likes;
+    photoElement.querySelector('.picture__comments').textContent = photos[i].comments.message.length;
+    fragment.appendChild(photoElement);
   }
   return fragment;
 };
