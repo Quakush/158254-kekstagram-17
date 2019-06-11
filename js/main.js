@@ -1,5 +1,8 @@
 'use strict';
 
+var MIN = 1; // начальное значения для диапазона случайных чисел
+var MIN_LIKES = 15; // минимальное кол-вл лайков
+var MAX_LIKES = 200; // максимальное кол-во лайков
 var template = document.querySelector('#picture').content.querySelector('.picture');
 var container = document.querySelector('.pictures');
 var fragment = document.createDocumentFragment();
@@ -23,13 +26,13 @@ var getRandom = function (min, max) {
 
 var getComments = function () {
   var text = [];
-  for (var i = 0; i < getRandom(1, 5); i++) { // случайное кол-во комментариев
-    text[i] = messages[getRandom(0, 5)]; // заполняю случайнм комментарием
+  for (var i = 0; i < getRandom(MIN, 5); i++) { // случайное кол-во комментариев
+    text[i] = messages[getRandom(MIN, 5)]; // заполняю случайнм комментарием
   }
   var comment = {
-    avatar: avatars[getRandom(0, 5)],
+    avatar: avatars[getRandom(MIN, 5)],
     message: text,
-    name: names[getRandom(0, 9)]
+    name: names[getRandom(MIN, 9)]
   };
   return comment;
 };
@@ -40,7 +43,7 @@ var initPhoto = function () {
   for (var i = 0; i < 25; i++) {
     photos[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
-      likes: getRandom(15, 200),
+      likes: getRandom(MIN_LIKES, MAX_LIKES),
       comments: getComments()
     };
     var photoElement = template.cloneNode(true);
