@@ -23,8 +23,8 @@ var getRandom = function (min, max) {
 
 var getComments = function () {
   var text = [];
-  for (var i = 0; i < getRandom(1, 5); i++) {
-    text[i] = messages[getRandom(0, 5)];
+  for (var i = 0; i < getRandom(1, 5); i++) { // случайное кол-во комментариев
+    text[i] = messages[getRandom(0, 5)]; // заполняю случайнм комментарием
   }
   var comment = {
     avatar: avatars[getRandom(0, 5)],
