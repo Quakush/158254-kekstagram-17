@@ -21,7 +21,7 @@ var messages = [
 var avatars = ['img/avatar-1.svg', 'img/avatar-2.svg', 'img/avatar-3.svg', 'img/avatar-4.svg', 'img/avatar-5.svg', 'img/avatar-6.svg'];
 
 var getRandom = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1));
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 var getComments = function () {
