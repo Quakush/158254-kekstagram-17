@@ -1,11 +1,16 @@
 'use strict';
 
+var ESC_CODE = 27;
+var ENTER_CODE = 13;
 var MIN = 0; // начальное значения для диапазона случайных чисел
 var MIN_LIKES = 15; // минимальное кол-вл лайков
 var MAX_LIKES = 200; // максимальное кол-во лайков
 var template = document.querySelector('#picture').content.querySelector('.picture');
 var container = document.querySelector('.pictures');
 var fragment = document.createDocumentFragment();
+var uploadFileInput = document.querySelector('#upload-file');
+var imgUploadOverlay = document.querySelector('.img-upload__overlay');
+var closeOverlayButton = document.querySelector('.img-upload__cancel');
 
 var names = ['Сергей', 'Алена', 'Вован', 'Колясик', 'Любаша', 'Света', 'Гюльчатай', 'Боб', 'Джонни', 'Жанна'];
 
@@ -56,4 +61,17 @@ var initPhoto = function () {
   return fragment;
 };
 
+var showUploadOverlay = function () {
+  imgUploadOverlay.classList.remove('hidden');
+};
+
+var closeUploadOverlay = function () {
+  imgUploadOverlay.classList.add('hidden');
+  uploadFileInput.value = '';
+};
+
 container.appendChild(initPhoto());
+
+uploadFileInput.addEventListener('change', function () {
+  showUploadOverlay();
+});
