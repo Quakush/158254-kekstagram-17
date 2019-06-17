@@ -61,12 +61,20 @@ var initPhoto = function () {
   return fragment;
 };
 
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_CODE) {
+    closeUploadOverlay();
+  }
+};
+
 var showUploadOverlay = function () {
   imgUploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
 };
 
 var closeUploadOverlay = function () {
   imgUploadOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
   uploadFileInput.value = '';
 };
 
@@ -74,4 +82,14 @@ container.appendChild(initPhoto());
 
 uploadFileInput.addEventListener('change', function () {
   showUploadOverlay();
+});
+
+closeOverlayButton.addEventListener('click', function() {
+  closeUploadOverlay();
+});
+
+closeOverlayButton.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_CODE) {
+    closeUploadOverlay();
+  }
 });
