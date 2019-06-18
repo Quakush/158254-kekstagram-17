@@ -10,7 +10,12 @@ var container = document.querySelector('.pictures');
 var fragment = document.createDocumentFragment();
 var uploadFileInput = document.querySelector('#upload-file');
 var imgUploadOverlay = document.querySelector('.img-upload__overlay');
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var img = imgUploadPreview.querySelector('img');
 var closeOverlayButton = document.querySelector('.img-upload__cancel');
+var effectsList = document.querySelector('.effects__list');
+var slider = document.querySelector('.effect-level__pin');
+var levelLine = document.querySelector('.effect-level__line');
 
 var names = ['Сергей', 'Алена', 'Вован', 'Колясик', 'Любаша', 'Света', 'Гюльчатай', 'Боб', 'Джонни', 'Жанна'];
 
@@ -78,13 +83,22 @@ var closeUploadOverlay = function () {
   uploadFileInput.value = '';
 };
 
+var resetEffect = function (elem) {
+  elem.classList = '';
+  elem.style.filter = 'none';
+};
+
+var getPinPosition = function () {
+  return (slider.offsetLeft / levelLine.clientWidth).toFixed(1);
+};
+
 container.appendChild(initPhoto());
 
 uploadFileInput.addEventListener('change', function () {
   showUploadOverlay();
 });
 
-closeOverlayButton.addEventListener('click', function() {
+closeOverlayButton.addEventListener('click', function () {
   closeUploadOverlay();
 });
 
@@ -93,3 +107,35 @@ closeOverlayButton.addEventListener('keydown', function (evt) {
     closeUploadOverlay();
   }
 });
+
+effectsList.addEventListener('change', function (evt) {
+  if (evt.target.value === 'none') {
+    resetEffect(img);
+  }
+  if (evt.target.value === 'chrome') {
+    resetEffect(img);
+    img.classList.add('effects__preview--chrome');
+    img.style.filter = 'grayscale(' + getPinPosition() + ')';
+  }
+  if (evt.target.value === 'sepia') {
+    resetEffect(img);
+    img.classList.add('effects__preview--sepia');
+    img.style.filter = 'sepia(' + getPinPosition() + ')';
+  }
+  if (evt.target.value === 'marvin') {
+    resetEffect(img);
+    img.classList.add('effects__preview--marvin');
+    img.style.filter = 'invert(' + getPinPosition() * 100 + '%)';
+  }
+  if (evt.target.value === 'phobos') {
+    resetEffect(img);
+    img.classList.add('effects__preview--phobos');
+    img.style.filter = 'blur(' + Math.round(getPinPosition() * 10 / 3) + 'px)';
+  }
+  if (evt.target.value === 'heat') {
+    resetEffect(img);
+    img.classList.add('effects__preview--heat');
+  }
+});
+
+
