@@ -71,7 +71,7 @@ var initPhoto = function () {
 
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_CODE) {
-    if (!(document.activeElement.className === 'text__description')) {
+    if (!(document.activeElement.classList.contains('text__description'))) {
       closeUploadOverlay();
     }
   }
