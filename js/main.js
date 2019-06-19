@@ -2,6 +2,9 @@
 
 var ESC_CODE = 27;
 var ENTER_CODE = 13;
+var PHOTOS_ON_PAGE = 25;
+var PROPORTION_FACTOR = 3;
+var BEGIN_VALUE = 1;
 var MIN = 0; // начальное значения для диапазона случайных чисел
 var MIN_LIKES = 15; // минимальное кол-вл лайков
 var MAX_LIKES = 200; // максимальное кол-во лайков
@@ -50,7 +53,7 @@ var getComments = function () {
 var initPhoto = function () {
   var photos = [];
 
-  for (var i = 0; i < 25; i++) {
+  for (var i = 0; i < PHOTOS_ON_PAGE; i++) {
     photos[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandom(MIN_LIKES, MAX_LIKES),
@@ -83,11 +86,6 @@ var closeUploadOverlay = function () {
   uploadFileInput.value = '';
 };
 
-var resetEffect = function (elem) {
-  elem.className = '';
-  elem.style.filter = 'none';
-};
-
 var getPinPosition = function () {
   return (slider.offsetLeft / levelLine.clientWidth).toFixed(1);
 };
@@ -113,32 +111,29 @@ effectsList.addEventListener('change', function (evt) {
   var currentEffect = evt.target.value;
 
   if (currentEffect === 'none') {
-    resetEffect(img);
+    img.className = '';
+    img.style.filter = 'none';
   }
+
   if (currentEffect === 'chrome') {
-    resetEffect(img);
-    img.classList.add('effects__preview--chrome');
+    img.className = 'effects__preview--chrome';
     img.style.filter = 'grayscale(' + getPinPosition() + ')';
   }
   if (currentEffect === 'sepia') {
-    resetEffect(img);
-    img.classList.add('effects__preview--sepia');
+    img.className = 'effects__preview--sepia';
     img.style.filter = 'sepia(' + getPinPosition() + ')';
   }
   if (currentEffect === 'marvin') {
-    resetEffect(img);
-    img.classList.add('effects__preview--marvin');
+    img.className = 'effects__preview--marvin';
     img.style.filter = 'invert(' + getPinPosition() * 100 + '%)';
   }
   if (currentEffect === 'phobos') {
-    resetEffect(img);
-    img.classList.add('effects__preview--phobos');
-    img.style.filter = 'blur(' + Math.round(getPinPosition() * 10 / 3) + 'px)';
+    img.className = 'effects__preview--phobos';
+    img.style.filter = 'blur(' + (getPinPosition() * PROPORTION_FACTOR).toFixed(1) + 'px)';
   }
   if (currentEffect === 'heat') {
-    resetEffect(img);
-    img.classList.add('effects__preview--heat');
-    img.style.filter = 'brightness(' + Math.round(getPinPosition() * 10 / 3) + ')';
+    img.className = 'effects__preview--heat';
+    img.style.filter = 'brightness(' + (getPinPosition() * PROPORTION_FACTOR + BEGIN_VALUE).toFixed(1) + ')';
   }
 });
 
