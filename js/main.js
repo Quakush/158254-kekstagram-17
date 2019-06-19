@@ -84,7 +84,7 @@ var closeUploadOverlay = function () {
 };
 
 var resetEffect = function (elem) {
-  elem.classList = '';
+  elem.className = '';
   elem.style.filter = 'none';
 };
 
@@ -96,6 +96,7 @@ container.appendChild(initPhoto());
 
 uploadFileInput.addEventListener('change', function () {
   showUploadOverlay();
+  img.classList.add('effects__preview--heat');
 });
 
 closeOverlayButton.addEventListener('click', function () {
@@ -135,6 +136,7 @@ effectsList.addEventListener('change', function (evt) {
   if (evt.target.value === 'heat') {
     resetEffect(img);
     img.classList.add('effects__preview--heat');
+    img.style.filter = 'brightness(' + Math.round(getPinPosition() * 10 / 3) + ')';
   }
 });
 
