@@ -110,30 +110,32 @@ closeOverlayButton.addEventListener('keydown', function (evt) {
 });
 
 effectsList.addEventListener('change', function (evt) {
-  if (evt.target.value === 'none') {
+  var currentEffect = evt.target.value;
+
+  if (currentEffect === 'none') {
     resetEffect(img);
   }
-  if (evt.target.value === 'chrome') {
+  if (currentEffect === 'chrome') {
     resetEffect(img);
     img.classList.add('effects__preview--chrome');
     img.style.filter = 'grayscale(' + getPinPosition() + ')';
   }
-  if (evt.target.value === 'sepia') {
+  if (currentEffect === 'sepia') {
     resetEffect(img);
     img.classList.add('effects__preview--sepia');
     img.style.filter = 'sepia(' + getPinPosition() + ')';
   }
-  if (evt.target.value === 'marvin') {
+  if (currentEffect === 'marvin') {
     resetEffect(img);
     img.classList.add('effects__preview--marvin');
     img.style.filter = 'invert(' + getPinPosition() * 100 + '%)';
   }
-  if (evt.target.value === 'phobos') {
+  if (currentEffect === 'phobos') {
     resetEffect(img);
     img.classList.add('effects__preview--phobos');
     img.style.filter = 'blur(' + Math.round(getPinPosition() * 10 / 3) + 'px)';
   }
-  if (evt.target.value === 'heat') {
+  if (currentEffect === 'heat') {
     resetEffect(img);
     img.classList.add('effects__preview--heat');
     img.style.filter = 'brightness(' + Math.round(getPinPosition() * 10 / 3) + ')';
