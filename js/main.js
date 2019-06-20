@@ -4,6 +4,7 @@ var ESC_CODE = 27;
 var ENTER_CODE = 13;
 var PHOTOS_ON_PAGE = 25;
 var PROPORTION_FACTOR = 3;
+var PERCENT = 100;
 var BEGIN_VALUE = 1;
 var MIN = 0; // начальное значения для диапазона случайных чисел
 var MIN_LIKES = 15; // минимальное кол-вл лайков
@@ -19,6 +20,8 @@ var closeOverlayButton = document.querySelector('.img-upload__cancel');
 var effectsList = document.querySelector('.effects__list');
 var slider = document.querySelector('.effect-level__pin');
 var levelLine = document.querySelector('.effect-level__line');
+var inputLevelEffect = document.querySelector('.effect-level__value');
+var levelDepth = document.querySelector('.effect-level__depth');
 
 var names = ['Сергей', 'Алена', 'Вован', 'Колясик', 'Любаша', 'Света', 'Гюльчатай', 'Боб', 'Джонни', 'Жанна'];
 
@@ -88,10 +91,6 @@ var closeUploadOverlay = function () {
   uploadFileInput.value = '';
 };
 
-var getPinPosition = function () {
-  return (slider.offsetLeft / levelLine.clientWidth).toFixed(1);
-};
-
 container.appendChild(initPhoto());
 
 uploadFileInput.addEventListener('change', function () {
@@ -109,34 +108,84 @@ closeOverlayButton.addEventListener('keydown', function (evt) {
   }
 });
 
-effectsList.addEventListener('change', function (evt) {
-  var currentEffect = evt.target.value;
+var changeEffectValue = function (effect, value) {
 
-  if (currentEffect === 'none') {
+  if (effect === 'none') {
     img.className = '';
     img.style.filter = 'none';
   }
 
-  if (currentEffect === 'chrome') {
+  if (effect === 'chrome') {
     img.className = 'effects__preview--chrome';
-    img.style.filter = 'grayscale(' + getPinPosition() + ')';
+    img.style.filter = 'grayscale(' + (value / PERCENT).toFixed(2) + ')';
   }
-  if (currentEffect === 'sepia') {
+  if (effect === 'sepia') {
     img.className = 'effects__preview--sepia';
-    img.style.filter = 'sepia(' + getPinPosition() + ')';
+    img.style.filter = 'sepia(' + (value / PERCENT).toFixed(2) + ')';
   }
-  if (currentEffect === 'marvin') {
+  if (effect === 'marvin') {
     img.className = 'effects__preview--marvin';
-    img.style.filter = 'invert(' + getPinPosition() * 100 + '%)';
+    img.style.filter = 'invert(' + value + '%)';
   }
-  if (currentEffect === 'phobos') {
+  if (effect === 'phobos') {
     img.className = 'effects__preview--phobos';
-    img.style.filter = 'blur(' + (getPinPosition() * PROPORTION_FACTOR).toFixed(1) + 'px)';
+    img.style.filter = 'blur(' + (value / PERCENT * PROPORTION_FACTOR).toFixed(2) + 'px)';
   }
-  if (currentEffect === 'heat') {
+  if (effect === 'heat') {
     img.className = 'effects__preview--heat';
-    img.style.filter = 'brightness(' + (getPinPosition() * PROPORTION_FACTOR + BEGIN_VALUE).toFixed(1) + ')';
+    img.style.filter = 'brightness(' + (value / PERCENT * PROPORTION_FACTOR + BEGIN_VALUE).toFixed(1) + ')';
   }
+};
+
+effectsList.addEventListener('change', function (evt) {
+  changeEffectValue(evt.target.value, inputLevelEffect.value);
+});
+
+slider.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var effectChosen = effectsList.querySelector(':checked');
+
+  var startCoords = {
+    x: evt.clientX
+  };
+
+  var SLIDER__RANGE = 100;
+  var SLIDER__WIDTH = levelLine.clientWidth;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var sliderPercent = (slider.offsetLeft / SLIDER__WIDTH * SLIDER__RANGE).toFixed(0);
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX
+    };
+
+    startCoords = {
+      x: moveEvt.clientX
+    };
+    inputLevelEffect.value = sliderPercent;
+    slider.style.left = (slider.offsetLeft - shift.x) + 'px';
+    levelDepth.style.width = sliderPercent + '%';
+
+    if (slider.offsetLeft <= 0) {
+      slider.style.left = 0 + 'px';
+    }
+    if (slider.offsetLeft >= SLIDER__WIDTH) {
+      slider.style.left = SLIDER__WIDTH + 'px';
+    }
+    changeEffectValue(effectChosen.value, inputLevelEffect.value);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 
