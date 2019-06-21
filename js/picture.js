@@ -4,44 +4,54 @@
   var BEGIN_VALUE = 1;
   var PERCENT = 100;
   var PROPORTION_FACTOR = 3;
+  var DEFAUL_LEVEL_EFFECT = 100;
+  var DEFAULT_EFFECT = 'none';
   var effectsList = document.querySelector('.effects__list');
   var inputLevelEffect = document.querySelector('.effect-level__value');
   var slider = document.querySelector('.effect-level__pin');
   var levelLine = document.querySelector('.effect-level__line');
   var levelDepth = document.querySelector('.effect-level__depth');
   var imgUploadPreview = document.querySelector('.img-upload__preview');
-  window.picture = imgUploadPreview.querySelector('img');
+  var effectBlock = document.querySelector('.effect-level');
+  var picture = imgUploadPreview.querySelector('img');
 
   var changeEffectValue = function (effect, value) {
+    inputLevelEffect.value = DEFAUL_LEVEL_EFFECT;
 
     if (effect === 'none') {
-      window.picture.className = '';
-      window.picture.style.filter = 'none';
+      picture.className = '';
+      picture.style.filter = 'none';
+      effectBlock.classList.add('hidden');
     }
 
     if (effect === 'chrome') {
-      window.picture.className = 'effects__preview--chrome';
-      window.picture.style.filter = 'grayscale(' + (value / PERCENT).toFixed(2) + ')';
+      picture.className = 'effects__preview--chrome';
+      picture.style.filter = 'grayscale(' + (value / PERCENT).toFixed(2) + ')';
     }
     if (effect === 'sepia') {
-      window.picture.className = 'effects__preview--sepia';
-      window.picture.style.filter = 'sepia(' + (value / PERCENT).toFixed(2) + ')';
+      picture.className = 'effects__preview--sepia';
+      picture.style.filter = 'sepia(' + (value / PERCENT).toFixed(2) + ')';
     }
     if (effect === 'marvin') {
-      window.picture.className = 'effects__preview--marvin';
-      window.picture.style.filter = 'invert(' + value + '%)';
+      picture.className = 'effects__preview--marvin';
+      picture.style.filter = 'invert(' + value + '%)';
     }
     if (effect === 'phobos') {
-      window.picture.className = 'effects__preview--phobos';
-      window.picture.style.filter = 'blur(' + (value / PERCENT * PROPORTION_FACTOR).toFixed(2) + 'px)';
+      picture.className = 'effects__preview--phobos';
+      picture.style.filter = 'blur(' + (value / PERCENT * PROPORTION_FACTOR).toFixed(2) + 'px)';
     }
     if (effect === 'heat') {
-      window.picture.className = 'effects__preview--heat';
-      window.picture.style.filter = 'brightness(' + (value / PERCENT * PROPORTION_FACTOR + BEGIN_VALUE).toFixed(1) + ')';
+      picture.className = 'effects__preview--heat';
+      picture.style.filter = 'brightness(' + (value / PERCENT * PROPORTION_FACTOR + BEGIN_VALUE).toFixed(1) + ')';
     }
   };
 
+  changeEffectValue(DEFAULT_EFFECT, DEFAUL_LEVEL_EFFECT);
+
   effectsList.addEventListener('change', function (evt) {
+    effectBlock.classList.remove('hidden');
+    slider.style.left = levelLine.clientWidth + 'px';
+    levelDepth.style.width = DEFAUL_LEVEL_EFFECT + '%';
     changeEffectValue(evt.target.value, inputLevelEffect.value);
   });
 
@@ -50,8 +60,12 @@
 
     var effectChosen = effectsList.querySelector(':checked');
 
-    var startCoords = {
+    var startCursorCoords = {
       x: evt.clientX
+    };
+
+    var startPinCoords = {
+      x: slider.offsetLeft
     };
 
     var SLIDER__RANGE = 100;
@@ -63,14 +77,11 @@
       var sliderPercent = (slider.offsetLeft / SLIDER__WIDTH * SLIDER__RANGE).toFixed(0);
 
       var shift = {
-        x: startCoords.x - moveEvt.clientX
+        x: startCursorCoords.x - moveEvt.clientX
       };
 
-      startCoords = {
-        x: moveEvt.clientX
-      };
       inputLevelEffect.value = sliderPercent;
-      slider.style.left = (slider.offsetLeft - shift.x) + 'px';
+      slider.style.left = (startPinCoords.x - shift.x) + 'px';
       levelDepth.style.width = sliderPercent + '%';
 
       if (slider.offsetLeft <= 0) {

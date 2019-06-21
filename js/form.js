@@ -28,7 +28,6 @@
 
   uploadFileInput.addEventListener('change', function () {
     showUploadOverlay();
-    window.picture.classList.add('effects__preview--heat');
   });
 
   closeOverlayButton.addEventListener('click', function () {
