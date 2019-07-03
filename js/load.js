@@ -3,7 +3,7 @@
 (function () {
   window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
-    var URL = ' https://js.dump.academy/kekstagram/data';
+    var URL = 'https://js.dump.academy/kekstagram/data';
 
     xhr.responseType = 'json';
     xhr.timeout = 5000;
