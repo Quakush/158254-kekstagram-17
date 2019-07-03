@@ -82,19 +82,20 @@
     activeButton.classList.add('img-filters__button--active');
   };
 
-  var onFilterButtonClick = function (evt) {
+  var onFilterButtonClick = window.debounce(function (evt) {
     if (evt.target.tagName === 'BUTTON') {
       var sortArr = imgData.slice();
       var arr = Sort[evt.target.id](sortArr);
 
-      console.log(arr);
       clearPhoto();
-      window.debounce(renderPhotos(arr));
-      setFilterButtonActive(evt);
+      renderPhotos(arr);
     }
-  };
+  });
 
   window.load(successHandler, errorHandler);
 
-  filtersImg.addEventListener('click', onFilterButtonClick);
+  filtersImg.addEventListener('click', function (evt) {
+    setFilterButtonActive(evt);
+    onFilterButtonClick(evt);
+  });
 })();
