@@ -8,7 +8,7 @@
   var filtersImg = document.querySelector('.img-filters');
   var activeButton = document.querySelector('.img-filters__button--active');
 
-  var imgData = [];
+  var netData = [];
 
   var Sort = {
     'filter-popular': function (arr) {
@@ -35,10 +35,11 @@
   };
 
   var successHandler = function (content) {
-    imgData = content;
+    netData = content;
 
-    renderPhotos(imgData);
+    renderPhotos(netData);
     filtersImg.classList.remove('img-filters--inactive');
+    window.showView(netData[0]);
   };
 
   var errorHandler = function (errorMessage) {
@@ -84,7 +85,7 @@
 
   var onFilterButtonClick = window.debounce(function (evt) {
     if (evt.target.tagName === 'BUTTON') {
-      var sortArr = imgData.slice();
+      var sortArr = netData.slice();
       var arr = Sort[evt.target.id](sortArr);
 
       clearPhoto();
