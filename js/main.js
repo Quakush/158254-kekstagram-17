@@ -39,6 +39,7 @@
 
     renderPhotos(netData);
     filtersImg.classList.remove('img-filters--inactive');
+    window.showView(netData[0]);
   };
 
   var errorHandler = function (errorMessage) {
@@ -93,8 +94,6 @@
   });
 
   window.load(successHandler, errorHandler);
-
-  window.showView(netData[0]);
 
   filtersImg.addEventListener('click', function (evt) {
     setFilterButtonActive(evt);

@@ -5,12 +5,13 @@
   var imgView = view.querySelector('.big-picture__img img');
   var likes = view.querySelector('.likes-count');
   var commentsCount = view.querySelector('.comments-count');
-  var comments = view.querySelectorAll('.social__comments');
+  var comments = view.querySelector('.social__comments');
+  var counter = view.querySelector('.social__comment-count');
+  var commentLoader = view.querySelector('.comments-loader');
   var description = view.querySelector('.social__caption');
 
   var setDataView = function (obj) {
     var viewData = obj;
-    console.log(viewData);
 
     var setCommentsView = function (data) {
       data.comments.forEach(function (it) {
@@ -26,7 +27,7 @@
 
         var text = document.createElement('p');
         text.classList.add('social__text');
-        text.textContent = it;
+        text.textContent = it.message;
 
         commentItem.appendChild(avatar);
         commentItem.appendChild(text);
@@ -43,7 +44,8 @@
 
   var showView = function (data) {
     view.classList.remove('hidden');
-    console.log(data);
+    counter.classList.add('visually-hidden');
+    commentLoader.classList.add('visually-hidden');
     setDataView(data);
   };
 
