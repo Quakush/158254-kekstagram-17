@@ -9,6 +9,7 @@
   var counter = view.querySelector('.social__comment-count');
   var commentLoader = view.querySelector('.comments-loader');
   var description = view.querySelector('.social__caption');
+  var closeButton = view.querySelector('.big-picture__cancel');
 
   var setDataView = function (obj) {
     var viewData = obj;
@@ -47,6 +48,28 @@
     counter.classList.add('visually-hidden');
     commentLoader.classList.add('visually-hidden');
     setDataView(data);
+    closeButton.addEventListener('click', onViewCloseClick);
+    closeButton.addEventListener('keydown', onViewKeydownEnter);
+    document.addEventListener('keydown', onViewKeydownEsc);
+  };
+
+  var closeView = function () {
+    view.classList.add('hidden');
+    closeButton.removeEventListener('click', onViewCloseClick);
+    closeButton.removeEventListener('keydown', onViewKeydownEnter);
+    document.removeEventListener('keydown', onViewKeydownEsc);
+  };
+
+  var onViewKeydownEsc = function (evt) {
+    window.utils.isKeydownEsc(evt, closeView);
+  };
+
+  var onViewKeydownEnter = function (evt) {
+    window.utils.isKeydownEnter(evt, closeView);
+  };
+
+  var onViewCloseClick = function () {
+    closeView();
   };
 
   window.showView = showView;
