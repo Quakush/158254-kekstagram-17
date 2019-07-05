@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.load = function (onSuccess, onError) {
+  window.backend.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     var URL = ' https://js.dump.academy/kekstagram/data';
 
