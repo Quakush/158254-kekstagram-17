@@ -6,6 +6,7 @@
   var uploadFileInput = document.querySelector('#upload-file');
   var imgUploadOverlay = document.querySelector('.img-upload__overlay');
   var closeOverlayButton = document.querySelector('.img-upload__cancel');
+  var inputHashTag = document.querySelector('.text__hashtags');
 
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_CODE) {
