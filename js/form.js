@@ -3,6 +3,7 @@
 (function () {
   var ESC_CODE = 27;
   var ENTER_CODE = 13;
+  var uploadForm = document.querySelector('.img-upload__form');
   var uploadFileInput = document.querySelector('#upload-file');
   var imgUploadOverlay = document.querySelector('.img-upload__overlay');
   var closeOverlayButton = document.querySelector('.img-upload__cancel');
@@ -18,19 +19,19 @@
     errorMessage: 'Хэш-тег начинается с символа \`#\` (решётка) и состоит из одного слова. \nХэш-теги разделяются пробелами. \nОдин и тот же хэш-тег не может быть использован дважды. \nНельзя указать больше пяти хэш-тегов. \nМаксимальная длина одного хэш-тега 20 символов.'
   };
 
-  var isUniqElement = function (arr) {
-    var isUniq = true;
+  var isUniqueElement = function (arr) {
+    var isUnique = true;
     var array = arr.map(function (elem) {
       return elem.toLowerCase();
     });
 
     for (var i = 0; i < arr.length; i++) {
       if (array.indexOf(array[i], i + 1) !== -1) {
-        isUniq = false;
+        isUnique = false;
         break;
       }
     }
-    return isUniq;
+    return isUnique;
   };
 
   var trimHashStrings = function (arr) {
@@ -50,18 +51,10 @@
     }
 
     hashStrings.forEach(function (it) {
-      // var hashSybmols = it.match(HashTagValidity.fistChar);
-      var arrSybmols = it.split('');
-      var copy = arrSybmols.filter(function (item) {
-        if (item === '#') {
-          return true;
-        }
-        return false;
-      });
-
-      var isValidTag = it.charAt(0) === HashTagValidity.hashTag && copy.length === 1;
+      var hashSybmols = it.match(HashTagValidity.firstChar);
+      var isValidTag = it.charAt(0) === HashTagValidity.hashTag && hashSybmols.length === 1;
       var isValidLenght = it.length <= HashTagValidity.maxLenghtHashTag;
-      var isValidUniq = isUniqElement(hashStrings);
+      var isValidUniq = isUniqueElement(hashStrings);
       var isValidAmount = hashStrings.length < HashTagValidity.maxAmountHashTags;
       var isValid = isValidTag && isValidLenght && isValidUniq && isValidAmount;
 
@@ -69,6 +62,11 @@
         inputHashTag.setCustomValidity(HashTagValidity.errorMessage);
       }
     });
+  };
+
+  var onFormSubmit = function (evt) {
+    evt.preventDefault();
+    window.save(new FormData(uploadForm));
   };
 
   var onPopupEscPress = function (evt) {
@@ -82,6 +80,7 @@
   var showUploadOverlay = function () {
     imgUploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
+    uploadForm.addEventListener('submit', onFormSubmit);
   };
 
   var closeUploadOverlay = function () {
