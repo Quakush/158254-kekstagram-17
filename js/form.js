@@ -18,6 +18,21 @@
     errorMessage: 'Хэш-тег начинается с символа \`#\` (решётка) и состоит из одного слова. \nХэш-теги разделяются пробелами. \nОдин и тот же хэш-тег не может быть использован дважды. \nНельзя указать больше пяти хэш-тегов. \nМаксимальная длина одного хэш-тега 20 символов.'
   };
 
+  var isUniqElement = function (arr) {
+    var isUniq = true;
+    var array = arr.map(function (elem) {
+      return elem.toLowerCase();
+    });
+
+    for (var i = 0; i < arr.length; i++) {
+      if (array.indexOf(array[i], i + 1) !== -1) {
+        isUniq = false;
+        break;
+      }
+    }
+    return isUniq;
+  };
+
   var trimHashStrings = function (arr) {
     var array = arr.filter(function (it) {
       return it !== '';
@@ -28,19 +43,30 @@
 
   var checkHashTag = function () {
     var hashArray = inputHashTag.value.split(HashTagValidity.separator);
-    var hashStings = trimHashStrings(hashArray);
+    var hashStrings = trimHashStrings(hashArray);
 
-    if (hashStings.length === 0) {
+    if (hashStrings.length === 0) {
       return;
     }
 
-    hashStings.forEach(function (it) {
-      var hashSybmols = it.match(HashTagValidity.fistChar);
-      var isValid = it.charAt(0) === HashTagValidity.hashTag && (hashSybmols && hashSybmols.length === 1) && it.length <= HashTagValidity.maxLenghtHashTag;
+    hashStrings.forEach(function (it) {
+      // var hashSybmols = it.match(HashTagValidity.fistChar);
+      var arrSybmols = it.split('');
+      var copy = arrSybmols.filter(function (item) {
+        if (item === '#') {
+          return true;
+        }
+        return false;
+      });
+
+      var isValidTag = it.charAt(0) === HashTagValidity.hashTag && copy.length === 1;
+      var isValidLenght = it.length <= HashTagValidity.maxLenghtHashTag;
+      var isValidUniq = isUniqElement(hashStrings);
+      var isValidAmount = hashStrings.length < HashTagValidity.maxAmountHashTags;
+      var isValid = isValidTag && isValidLenght && isValidUniq && isValidAmount;
 
       if (!isValid) {
-        inputHashTag.setCustomValidity('hh5h56uh45u');
-        console.log(HashTagValidity.errorMessage);
+        inputHashTag.setCustomValidity(HashTagValidity.errorMessage);
       }
     });
   };
@@ -79,8 +105,7 @@
   });
 
   submitButton.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    console.log(inputHashTag.value);
+    inputHashTag.setCustomValidity('');
     checkHashTag(inputHashTag.value);
   });
 })();
