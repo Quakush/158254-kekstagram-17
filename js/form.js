@@ -11,9 +11,6 @@
   var submitButton = document.querySelector('.img-upload__submit');
 
   var HashTagValidity = {
-    hashTag: '#',
-    separator: ' ',
-    firstChar: /#/g,
     maxAmountHashTags: 5,
     maxLenghtHashTag: 20,
     errorMessage: 'Хэш-тег начинается с символа \`#\` (решётка) и состоит из одного слова. \nХэш-теги разделяются пробелами. \nОдин и тот же хэш-тег не может быть использован дважды. \nНельзя указать больше пяти хэш-тегов. \nМаксимальная длина одного хэш-тега 20 символов.'
@@ -34,34 +31,28 @@
     return isUnique;
   };
 
-  var trimHashStrings = function (arr) {
-    var array = arr.filter(function (it) {
-      return it !== '';
-    });
-    inputHashTag.value = array.join(HashTagValidity.separator);
-    return array;
-  };
-
   var checkHashTag = function () {
-    var hashArray = inputHashTag.value.split(HashTagValidity.separator);
-    var hashStrings = trimHashStrings(hashArray);
+    var hashStrings = inputHashTag.value.trim().split(/\s+/);
 
     if (hashStrings.length === 0) {
       return;
     }
 
-    hashStrings.forEach(function (it) {
-      var hashSybmols = it.match(HashTagValidity.firstChar);
-      var isValidTag = it.charAt(0) === HashTagValidity.hashTag && hashSybmols.length === 1;
-      var isValidLenght = it.length <= HashTagValidity.maxLenghtHashTag;
-      var isValidUniq = isUniqueElement(hashStrings);
-      var isValidAmount = hashStrings.length < HashTagValidity.maxAmountHashTags;
-      var isValid = isValidTag && isValidLenght && isValidUniq && isValidAmount;
+    var isValidTag = false;
+    var isValidLenght = false;
+    var isValidUniq = isUniqueElement(hashStrings);
+    var isValidAmount = hashStrings.length < HashTagValidity.maxAmountHashTags;
 
-      if (!isValid) {
-        inputHashTag.setCustomValidity(HashTagValidity.errorMessage);
-      }
+    hashStrings.forEach(function (it) {
+      isValidTag = /^#[^#]+$/.test(it);
+      isValidLenght = it.length <= HashTagValidity.maxLenghtHashTag;
     });
+
+    var isValid = isValidTag && isValidLenght && isValidUniq && isValidAmount;
+
+    if (!isValid) {
+      inputHashTag.setCustomValidity(HashTagValidity.errorMessage);
+    }
   };
 
   var onFormSubmit = function (evt) {
