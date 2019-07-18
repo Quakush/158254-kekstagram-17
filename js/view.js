@@ -54,6 +54,11 @@
   };
 
   var closeView = function () {
+    var removedComments = Array.from(comments.querySelectorAll('.social__comment'));
+
+    removedComments.forEach(function (it) {
+      it.parentNode.removeChild(it);
+    });
     view.classList.add('hidden');
     closeButton.removeEventListener('click', onViewCloseClick);
     closeButton.removeEventListener('keydown', onViewKeydownEnter);
