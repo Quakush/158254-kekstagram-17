@@ -29,7 +29,7 @@
     xhr.send();
   };
 
-  window.save(data, onSuccess, onError) {
+  window.save = function (data, onSuccess, onError) {
     var URL = 'https://js.dump.academy/kekstagram';
     var xhr = new XMLHttpRequest();
 

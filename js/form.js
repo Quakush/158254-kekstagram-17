@@ -94,7 +94,7 @@
     }
   });
 
-  submitButton.addEventListener('click', function (evt) {
+  submitButton.addEventListener('click', function () {
     inputHashTag.setCustomValidity('');
     checkHashTag(inputHashTag.value);
   });
