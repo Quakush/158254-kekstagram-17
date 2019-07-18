@@ -40,15 +40,18 @@
 
     var isValidTag = false;
     var isValidLenght = false;
-    var isValidUniq = isUniqueElement(hashStrings);
+    var isValidUnique = isUniqueElement(hashStrings);
     var isValidAmount = hashStrings.length < HashTagValidity.maxAmountHashTags;
 
-    hashStrings.forEach(function (it) {
-      isValidTag = /^#[^#]+$/.test(it);
-      isValidLenght = it.length <= HashTagValidity.maxLenghtHashTag;
-    });
+    for (var i = 0; i < hashStrings.length; i++) {
+      isValidTag = /^#[^#]+$/.test(hashStrings[i]);
+      isValidLenght = hashStrings[i].length <= HashTagValidity.maxLenghtHashTag;
+      if (isValidTag === false || isValidLenght === false) {
+        break;
+      }
+    }
 
-    var isValid = isValidTag && isValidLenght && isValidUniq && isValidAmount;
+    var isValid = isValidTag && isValidLenght && isValidUnique && isValidAmount;
 
     if (!isValid) {
       inputHashTag.setCustomValidity(HashTagValidity.errorMessage);
