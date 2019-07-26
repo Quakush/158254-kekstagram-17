@@ -37,7 +37,7 @@
   var checkHashTag = function () {
     var hashStrings = inputHashTag.value.trim().split(/\s+/);
 
-    if (hashStrings.length === 0) {
+    if (hashStrings[0] === '') {
       return;
     }
 
@@ -62,9 +62,9 @@
   };
 
   var openDialogOverlay = function (win) {
-    var dialogWindow = document.querySelector('#' + win).content.querySelector('.' + win);
-
-    container.appendChild(dialogWindow);
+    var dialogWindowTemplate = document.querySelector('#' + win).content.querySelector('.' + win);
+    var dialogWindowElement = dialogWindowTemplate.cloneNode(true);
+    container.appendChild(dialogWindowElement);
   };
 
   var createDialogOverlayListeners = function (win) {
