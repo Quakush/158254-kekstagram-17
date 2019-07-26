@@ -67,16 +67,16 @@
     container.appendChild(dialogWindow);
   };
 
-  var closeDialogOverlay = function (win) {
+  var createDialogOverlayListeners = function (win) {
     var dialogOverlay = document.querySelector('.' + win);
     var dialogOverlayButton = dialogOverlay.querySelectorAll('.' + win + '__button');
 
     var onDialogRemove = function () {
       dialogOverlay.remove();
-    }
+    };
 
     var onDialogOverlayClose = function (evt) {
-      if(!evt.target.closest('.' + win + '__inner')) {
+      if (!evt.target.closest('.' + win + '__inner')) {
         onDialogRemove();
       }
     };
@@ -105,13 +105,13 @@
       picture.className = 'img-upload__preview--none';
       picture.style.filter = '';
       openDialogOverlay('success');
-      closeDialogOverlay('success');
+      createDialogOverlayListeners('success');
     };
 
     var onErrorMessage = function () {
       closeUploadOverlay();
       openDialogOverlay('error');
-      closeDialogOverlay('error')
+      createDialogOverlayListeners('error');
     };
 
     window.backend.save(data, onSuccessSaved, onErrorMessage);
