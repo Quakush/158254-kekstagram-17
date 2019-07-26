@@ -105,8 +105,7 @@
     }
   };
 
-  window.load(successHandler, errorHandler);
-
+  window.backend.load(successHandler, errorHandler);
   filtersImg.addEventListener('click', function (evt) {
     setFilterButtonActive(evt);
     onFilterButtonClick(evt);

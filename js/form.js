@@ -8,7 +8,10 @@
   var imgUploadOverlay = document.querySelector('.img-upload__overlay');
   var closeOverlayButton = document.querySelector('.img-upload__cancel');
   var inputHashTag = document.querySelector('.text__hashtags');
-  var submitButton = document.querySelector('.img-upload__submit');
+  var inputLevelEffect = document.querySelector('.effect-level__value');
+  var imgUploadPreview = document.querySelector('.img-upload__preview');
+  var picture = imgUploadPreview.querySelector('img');
+  var container = document.querySelector('main');
 
   var HashTagValidity = {
     maxAmountHashTags: 5,
@@ -34,7 +37,7 @@
   var checkHashTag = function () {
     var hashStrings = inputHashTag.value.trim().split(/\s+/);
 
-    if (hashStrings.length === 0) {
+    if (hashStrings[0] === '') {
       return;
     }
 
@@ -58,9 +61,60 @@
     }
   };
 
+  var openDialogOverlay = function (win) {
+    var dialogWindowTemplate = document.querySelector('#' + win).content.querySelector('.' + win);
+    var dialogWindowElement = dialogWindowTemplate.cloneNode(true);
+    container.appendChild(dialogWindowElement);
+  };
+
+  var createDialogOverlayListeners = function (win) {
+    var dialogOverlay = document.querySelector('.' + win);
+    var dialogOverlayButton = dialogOverlay.querySelectorAll('.' + win + '__button');
+
+    var onDialogRemove = function () {
+      dialogOverlay.remove();
+    };
+
+    var onDialogOverlayClose = function (evt) {
+      if (!evt.target.closest('.' + win + '__inner')) {
+        onDialogRemove();
+      }
+    };
+
+    var onDialogKeydownEsc = function (evt) {
+      window.utils.isKeydownEsc(evt, onDialogRemove);
+    };
+
+    dialogOverlay.addEventListener('click', onDialogOverlayClose);
+    document.addEventListener('keydown', onDialogKeydownEsc);
+    dialogOverlayButton.forEach(function (button) {
+      button.addEventListener('click', onDialogRemove);
+    });
+  };
+
   var onFormSubmit = function (evt) {
     evt.preventDefault();
-    window.save(new FormData(uploadForm));
+    checkHashTag(inputHashTag.value);
+
+    var data = new FormData(uploadForm);
+    var onSuccessSaved = function () {
+
+      uploadForm.reset();
+      closeUploadOverlay();
+      inputLevelEffect.value = '100%';
+      picture.className = 'img-upload__preview--none';
+      picture.style.filter = '';
+      openDialogOverlay('success');
+      createDialogOverlayListeners('success');
+    };
+
+    var onErrorMessage = function () {
+      closeUploadOverlay();
+      openDialogOverlay('error');
+      createDialogOverlayListeners('error');
+    };
+
+    window.backend.save(data, onSuccessSaved, onErrorMessage);
   };
 
   var onPopupEscPress = function (evt) {
@@ -97,7 +151,7 @@
     }
   });
 
-  submitButton.addEventListener('click', function () {
+  inputHashTag.addEventListener('keyup', function () {
     inputHashTag.setCustomValidity('');
     checkHashTag(inputHashTag.value);
   });
