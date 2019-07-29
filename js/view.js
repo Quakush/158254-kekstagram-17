@@ -39,7 +39,7 @@
   };
 
   var showView = function (data) {
-    var viewData = Object.create(data);
+    var viewData = data;
     var currentData = viewData.comments.slice();
 
     var setDataView = function (obj) {
