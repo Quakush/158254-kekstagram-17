@@ -47,7 +47,6 @@
       likes.textContent = obj.likes;
       commentsCount.textContent = obj.comments.length;
       description.textContent = obj.description;
-      setCommentsView(viewData);
     };
 
     var setCommentsView = function (comm) {
