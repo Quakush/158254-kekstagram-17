@@ -2,7 +2,6 @@
 
 (function () {
   var COMMENTS_SHOW = 5;
-  var commentsCounter = 0;
   var view = document.querySelector('.big-picture');
   var imgView = view.querySelector('.big-picture__img img');
   var likes = view.querySelector('.likes-count');
@@ -13,72 +12,63 @@
   var description = view.querySelector('.social__caption');
   var closeButton = view.querySelector('.big-picture__cancel');
 
+  var createComment = function (data) {
+    var commentItem = document.createElement('li');
+
+    commentItem.classList.add('social__comment');
+
+    var avatar = document.createElement('img');
+
+    avatar.classList.add('social__picture');
+    avatar.src = data.avatar;
+    avatar.width = '35';
+    avatar.height = '35';
+    avatar.alt = 'Аватар комментатора фотографии';
+
+    var text = document.createElement('p');
+
+    text.classList.add('social__text');
+    text.textContent = data.message;
+    commentItem.appendChild(avatar);
+    commentItem.appendChild(text);
+    comments.appendChild(commentItem);
+  };
+
+  var onCommentLoaderClick = function () {
+    setCommentsView('?');
+  };
+
+  var setCommentsView = function (data) {
+    var commentsShow = data.comments.length > COMMENTS_SHOW ? COMMENTS_SHOW : data.comments.length;
+    for (var i = 0; i < commentsShow; i++) {
+      createComment(data.comments[0]);
+      data.comments.shift();
+    }
+    if (data.comments.length === 0) {
+      commentLoader.classList.add('visually-hidden');
+    }
+  };
+
   var setDataView = function (obj) {
     var viewData = obj;
-    var commentsInData = viewData.comments.length;
-
-    var onCommentLoaderClick = function () {
-      setCommentsView(viewData);
-    };
-
-    var setCommentsView = function (data) {
-      var innerCounter = 0;
-      var commentsTotalShow = commentsInData > COMMENTS_SHOW ? COMMENTS_SHOW : commentsInData;
-      console.log('колво показываемых комментов ' + commentsTotalShow);
-      for (var i = 0; i < commentsTotalShow; i++) {
-        console.log('счетчик комментов до итерации ' + commentsCounter);
-
-        var commentItem = document.createElement('li');
-        commentItem.classList.add('social__comment');
-
-        var avatar = document.createElement('img');
-        avatar.classList.add('social__picture');
-        avatar.src = data.comments[commentsCounter + i].avatar;
-        avatar.width = '35';
-        avatar.height = '35';
-        avatar.alt = 'Аватар комментатора фотографии';
-
-        var text = document.createElement('p');
-        text.classList.add('social__text');
-        text.textContent = data.comments[commentsCounter + i].message;
-        console.log('выводим коммент');
-        commentItem.appendChild(avatar);
-        commentItem.appendChild(text);
-        comments.appendChild(commentItem);
-        innerCounter++;
-      }
-      commentsCounter += innerCounter;
-      console.log('счетчик комментов после цикла' + commentsCounter);
-      commentsInData -= commentsTotalShow;
-      console.log('осталось вывести ' + commentsInData);
-      if (commentsInData <= 0) {
-        commentLoader.classList.add('visually-hidden');
-        console.log('удаляем кнопку загрузить еще');
-      }
-    };
 
     imgView.src = obj.url;
     likes.textContent = obj.likes;
     commentsCount.textContent = obj.comments.length;
     description.textContent = obj.description;
     setCommentsView(viewData);
-    commentLoader.addEventListener('click', onCommentLoaderClick);
   };
 
   var showView = function (data) {
-    console.log('очищаем комменты');
     removeComments();
-    console.log('делаем видимой кнопку загрузить');
     commentLoader.classList.remove('visually-hidden');
-    console.log('показываем окно');
     view.classList.remove('hidden');
     counter.classList.add('visually-hidden');
-    console.log('инициализируем картинку');
     setDataView(data);
-    console.log('устанавливаем слушатели на закрытие');
     closeButton.addEventListener('click', onViewCloseClick);
     closeButton.addEventListener('keydown', onViewKeydownEnter);
     document.addEventListener('keydown', onViewKeydownEsc);
+    commentLoader.addEventListener('click', onCommentLoaderClick);
   };
 
   var removeComments = function () {
@@ -86,13 +76,12 @@
   };
 
   var closeView = function () {
-    commentsCounter = 0;
-    console.log('сбрасываем счетчик комментов');
     removeComments();
     view.classList.add('hidden');
     closeButton.removeEventListener('click', onViewCloseClick);
     closeButton.removeEventListener('keydown', onViewKeydownEnter);
     document.removeEventListener('keydown', onViewKeydownEsc);
+    commentLoader.removeEventListener('click', onCommentLoaderClick)
   };
 
   var onViewKeydownEsc = function (evt) {
