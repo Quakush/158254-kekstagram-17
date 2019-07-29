@@ -17,7 +17,12 @@
     var viewData = obj;
     var commentsInData = viewData.comments.length;
 
+    var onCommentLoaderClick = function () {
+      setCommentsView(viewData);
+    };
+
     var setCommentsView = function (data) {
+      var innerCounter = 0;
       var commentsTotalShow = commentsInData > COMMENTS_SHOW ? COMMENTS_SHOW : commentsInData;
       console.log('колво показываемых комментов ' + commentsTotalShow);
       for (var i = 0; i < commentsTotalShow; i++) {
@@ -28,7 +33,7 @@
 
         var avatar = document.createElement('img');
         avatar.classList.add('social__picture');
-        avatar.src = data.comments[commentsCounter +  i].avatar;
+        avatar.src = data.comments[commentsCounter + i].avatar;
         avatar.width = '35';
         avatar.height = '35';
         avatar.alt = 'Аватар комментатора фотографии';
@@ -40,19 +45,16 @@
         commentItem.appendChild(avatar);
         commentItem.appendChild(text);
         comments.appendChild(commentItem);
-        commentsCounter++;
+        innerCounter++;
       }
-      console.log('счетчик комментов после итерации' + commentsCounter);
+      commentsCounter += innerCounter;
+      console.log('счетчик комментов после цикла' + commentsCounter);
       commentsInData -= commentsTotalShow;
       console.log('осталось вывести ' + commentsInData);
-      if (commentsInData === 0) {
+      if (commentsInData <= 0) {
         commentLoader.classList.add('visually-hidden');
         console.log('удаляем кнопку загрузить еще');
       }
-    };
-
-    var onCommentLoaderClick = function () {
-      setCommentsView(viewData);
     };
 
     imgView.src = obj.url;
