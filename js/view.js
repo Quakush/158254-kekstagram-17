@@ -39,7 +39,8 @@
   };
 
   var showView = function (data) {
-    var viewData = data;
+    var viewData = Object.create(data);
+    var currentData = viewData.comments.slice();
 
     var setDataView = function (obj) {
 
@@ -50,18 +51,18 @@
     };
 
     var setCommentsView = function (comm) {
-      var commentsShow = comm.comments.length > COMMENTS_SHOW ? COMMENTS_SHOW : comm.comments.length;
+      var commentsShow = comm.length > COMMENTS_SHOW ? COMMENTS_SHOW : comm.length;
       for (var i = 0; i < commentsShow; i++) {
-        createComment(comm.comments[0]);
-        comm.comments.shift();
+        createComment(comm[0]);
+        comm.shift();
       }
-      if (comm.comments.length === 0) {
+      if (comm.length === 0) {
         commentLoader.classList.add('visually-hidden');
       }
     };
 
     var onCommentLoaderClick = function () {
-      setCommentsView(viewData);
+      setCommentsView(currentData);
     };
 
     var closeView = function () {
@@ -89,8 +90,8 @@
     commentLoader.classList.remove('visually-hidden');
     view.classList.remove('hidden');
     counter.classList.add('visually-hidden');
-    setDataView(data);
-    setCommentsView(viewData);
+    setDataView(viewData);
+    setCommentsView(currentData);
     closeButton.addEventListener('click', onViewCloseClick);
     closeButton.addEventListener('keydown', onViewKeydownEnter);
     document.addEventListener('keydown', onViewKeydownEsc);
