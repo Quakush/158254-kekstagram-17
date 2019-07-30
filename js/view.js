@@ -39,8 +39,7 @@
   };
 
   var showView = function (data) {
-    var viewData = data;
-    var currentData = viewData.comments.slice();
+    var currentData = data.comments.slice();
 
     var setDataView = function (obj) {
 
@@ -90,7 +89,7 @@
     commentLoader.classList.remove('visually-hidden');
     view.classList.remove('hidden');
     counter.classList.add('visually-hidden');
-    setDataView(viewData);
+    setDataView(data);
     setCommentsView(currentData);
     closeButton.addEventListener('click', onViewCloseClick);
     closeButton.addEventListener('keydown', onViewKeydownEnter);
